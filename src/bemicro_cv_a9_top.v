@@ -52,5 +52,7 @@ module bemicro_cv_a9_top (
     inout   wire    [3:0]   SDD
 );
 
+`include "wb_intercon.vh"
+
 endmodule
 
