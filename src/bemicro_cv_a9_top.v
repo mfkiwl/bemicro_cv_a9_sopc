@@ -28,7 +28,7 @@ module bemicro_cv_a9_top (
     output  wire    [0:0]   DDR3_ODT,
     output  wire    [0:0]   DDR3_RASn,
     output  wire            DDR3_RESETn,
-    output  wire	[0:0]   DDR3_WEn,
+    output  wire    [0:0]   DDR3_WEn,
     
     // Ethernet PHY pins
     input   wire            ENET_RX_CLK,
@@ -39,8 +39,8 @@ module bemicro_cv_a9_top (
     input   wire            ENET_RX_DV,
     output  wire            ENET_MDC,
     inout   wire            ENET_MDIO,
-    output  wire	[3:0]	ENET_TXD,
-    input   wire	[3:0]	ENET_RXD,
+    output  wire    [3:0]   ENET_TXD,
+    input   wire    [3:0]   ENET_RXD,
     
     // EEPROM pins
     inout   wire            EEPROM_SDA,
