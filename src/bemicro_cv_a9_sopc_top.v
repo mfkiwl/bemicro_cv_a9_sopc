@@ -1,5 +1,5 @@
 
-module bemicro_cv_a9_top (
+module bemicro_cv_a9_sopc_top (
     // Clock pins
     input   wire            DDR3_CLK_50MHZ,
     input   wire            CLK_24MHZ,
