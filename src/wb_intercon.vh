@@ -24,18 +24,18 @@ wire [31:0] wb_s2m_cpu_d_dat;
 wire        wb_s2m_cpu_d_ack;
 wire        wb_s2m_cpu_d_err;
 wire        wb_s2m_cpu_d_rty;
-wire [31:0] wb_m2s_dbg_adr;
-wire [31:0] wb_m2s_dbg_dat;
-wire  [3:0] wb_m2s_dbg_sel;
-wire        wb_m2s_dbg_we;
-wire        wb_m2s_dbg_cyc;
-wire        wb_m2s_dbg_stb;
-wire  [2:0] wb_m2s_dbg_cti;
-wire  [1:0] wb_m2s_dbg_bte;
-wire [31:0] wb_s2m_dbg_dat;
-wire        wb_s2m_dbg_ack;
-wire        wb_s2m_dbg_err;
-wire        wb_s2m_dbg_rty;
+wire [31:0] wb_m2s_cpu_dbg_adr;
+wire [31:0] wb_m2s_cpu_dbg_dat;
+wire  [3:0] wb_m2s_cpu_dbg_sel;
+wire        wb_m2s_cpu_dbg_we;
+wire        wb_m2s_cpu_dbg_cyc;
+wire        wb_m2s_cpu_dbg_stb;
+wire  [2:0] wb_m2s_cpu_dbg_cti;
+wire  [1:0] wb_m2s_cpu_dbg_bte;
+wire [31:0] wb_s2m_cpu_dbg_dat;
+wire        wb_s2m_cpu_dbg_ack;
+wire        wb_s2m_cpu_dbg_err;
+wire        wb_s2m_cpu_dbg_rty;
 wire [31:0] wb_m2s_eth0_master_adr;
 wire [31:0] wb_m2s_eth0_master_dat;
 wire  [3:0] wb_m2s_eth0_master_sel;
@@ -72,30 +72,30 @@ wire [31:0] wb_s2m_ddr3_mem_port2_dat;
 wire        wb_s2m_ddr3_mem_port2_ack;
 wire        wb_s2m_ddr3_mem_port2_err;
 wire        wb_s2m_ddr3_mem_port2_rty;
-wire [31:0] wb_m2s_qspi_flash_mem_adr;
-wire [31:0] wb_m2s_qspi_flash_mem_dat;
-wire  [3:0] wb_m2s_qspi_flash_mem_sel;
-wire        wb_m2s_qspi_flash_mem_we;
-wire        wb_m2s_qspi_flash_mem_cyc;
-wire        wb_m2s_qspi_flash_mem_stb;
-wire  [2:0] wb_m2s_qspi_flash_mem_cti;
-wire  [1:0] wb_m2s_qspi_flash_mem_bte;
-wire [31:0] wb_s2m_qspi_flash_mem_dat;
-wire        wb_s2m_qspi_flash_mem_ack;
-wire        wb_s2m_qspi_flash_mem_err;
-wire        wb_s2m_qspi_flash_mem_rty;
-wire [31:0] wb_m2s_oc_mem_adr;
-wire [31:0] wb_m2s_oc_mem_dat;
-wire  [3:0] wb_m2s_oc_mem_sel;
-wire        wb_m2s_oc_mem_we;
-wire        wb_m2s_oc_mem_cyc;
-wire        wb_m2s_oc_mem_stb;
-wire  [2:0] wb_m2s_oc_mem_cti;
-wire  [1:0] wb_m2s_oc_mem_bte;
-wire [31:0] wb_s2m_oc_mem_dat;
-wire        wb_s2m_oc_mem_ack;
-wire        wb_s2m_oc_mem_err;
-wire        wb_s2m_oc_mem_rty;
+wire [31:0] wb_m2s_spi_flash_mem_adr;
+wire [31:0] wb_m2s_spi_flash_mem_dat;
+wire  [3:0] wb_m2s_spi_flash_mem_sel;
+wire        wb_m2s_spi_flash_mem_we;
+wire        wb_m2s_spi_flash_mem_cyc;
+wire        wb_m2s_spi_flash_mem_stb;
+wire  [2:0] wb_m2s_spi_flash_mem_cti;
+wire  [1:0] wb_m2s_spi_flash_mem_bte;
+wire [31:0] wb_s2m_spi_flash_mem_dat;
+wire        wb_s2m_spi_flash_mem_ack;
+wire        wb_s2m_spi_flash_mem_err;
+wire        wb_s2m_spi_flash_mem_rty;
+wire [31:0] wb_m2s_boot_rom_adr;
+wire [31:0] wb_m2s_boot_rom_dat;
+wire  [3:0] wb_m2s_boot_rom_sel;
+wire        wb_m2s_boot_rom_we;
+wire        wb_m2s_boot_rom_cyc;
+wire        wb_m2s_boot_rom_stb;
+wire  [2:0] wb_m2s_boot_rom_cti;
+wire  [1:0] wb_m2s_boot_rom_bte;
+wire [31:0] wb_s2m_boot_rom_dat;
+wire        wb_s2m_boot_rom_ack;
+wire        wb_s2m_boot_rom_err;
+wire        wb_s2m_boot_rom_rty;
 wire [31:0] wb_m2s_eth0_adr;
 wire [31:0] wb_m2s_eth0_dat;
 wire  [3:0] wb_m2s_eth0_sel;
@@ -136,18 +136,18 @@ wb_intercon wb_intercon0
     .wb_cpu_d_ack_o          (wb_s2m_cpu_d_ack),
     .wb_cpu_d_err_o          (wb_s2m_cpu_d_err),
     .wb_cpu_d_rty_o          (wb_s2m_cpu_d_rty),
-    .wb_dbg_adr_i            (wb_m2s_dbg_adr),
-    .wb_dbg_dat_i            (wb_m2s_dbg_dat),
-    .wb_dbg_sel_i            (wb_m2s_dbg_sel),
-    .wb_dbg_we_i             (wb_m2s_dbg_we),
-    .wb_dbg_cyc_i            (wb_m2s_dbg_cyc),
-    .wb_dbg_stb_i            (wb_m2s_dbg_stb),
-    .wb_dbg_cti_i            (wb_m2s_dbg_cti),
-    .wb_dbg_bte_i            (wb_m2s_dbg_bte),
-    .wb_dbg_dat_o            (wb_s2m_dbg_dat),
-    .wb_dbg_ack_o            (wb_s2m_dbg_ack),
-    .wb_dbg_err_o            (wb_s2m_dbg_err),
-    .wb_dbg_rty_o            (wb_s2m_dbg_rty),
+    .wb_cpu_dbg_adr_i        (wb_m2s_cpu_dbg_adr),
+    .wb_cpu_dbg_dat_i        (wb_m2s_cpu_dbg_dat),
+    .wb_cpu_dbg_sel_i        (wb_m2s_cpu_dbg_sel),
+    .wb_cpu_dbg_we_i         (wb_m2s_cpu_dbg_we),
+    .wb_cpu_dbg_cyc_i        (wb_m2s_cpu_dbg_cyc),
+    .wb_cpu_dbg_stb_i        (wb_m2s_cpu_dbg_stb),
+    .wb_cpu_dbg_cti_i        (wb_m2s_cpu_dbg_cti),
+    .wb_cpu_dbg_bte_i        (wb_m2s_cpu_dbg_bte),
+    .wb_cpu_dbg_dat_o        (wb_s2m_cpu_dbg_dat),
+    .wb_cpu_dbg_ack_o        (wb_s2m_cpu_dbg_ack),
+    .wb_cpu_dbg_err_o        (wb_s2m_cpu_dbg_err),
+    .wb_cpu_dbg_rty_o        (wb_s2m_cpu_dbg_rty),
     .wb_eth0_master_adr_i    (wb_m2s_eth0_master_adr),
     .wb_eth0_master_dat_i    (wb_m2s_eth0_master_dat),
     .wb_eth0_master_sel_i    (wb_m2s_eth0_master_sel),
@@ -184,30 +184,30 @@ wb_intercon wb_intercon0
     .wb_ddr3_mem_port2_ack_i (wb_s2m_ddr3_mem_port2_ack),
     .wb_ddr3_mem_port2_err_i (wb_s2m_ddr3_mem_port2_err),
     .wb_ddr3_mem_port2_rty_i (wb_s2m_ddr3_mem_port2_rty),
-    .wb_qspi_flash_mem_adr_o (wb_m2s_qspi_flash_mem_adr),
-    .wb_qspi_flash_mem_dat_o (wb_m2s_qspi_flash_mem_dat),
-    .wb_qspi_flash_mem_sel_o (wb_m2s_qspi_flash_mem_sel),
-    .wb_qspi_flash_mem_we_o  (wb_m2s_qspi_flash_mem_we),
-    .wb_qspi_flash_mem_cyc_o (wb_m2s_qspi_flash_mem_cyc),
-    .wb_qspi_flash_mem_stb_o (wb_m2s_qspi_flash_mem_stb),
-    .wb_qspi_flash_mem_cti_o (wb_m2s_qspi_flash_mem_cti),
-    .wb_qspi_flash_mem_bte_o (wb_m2s_qspi_flash_mem_bte),
-    .wb_qspi_flash_mem_dat_i (wb_s2m_qspi_flash_mem_dat),
-    .wb_qspi_flash_mem_ack_i (wb_s2m_qspi_flash_mem_ack),
-    .wb_qspi_flash_mem_err_i (wb_s2m_qspi_flash_mem_err),
-    .wb_qspi_flash_mem_rty_i (wb_s2m_qspi_flash_mem_rty),
-    .wb_oc_mem_adr_o         (wb_m2s_oc_mem_adr),
-    .wb_oc_mem_dat_o         (wb_m2s_oc_mem_dat),
-    .wb_oc_mem_sel_o         (wb_m2s_oc_mem_sel),
-    .wb_oc_mem_we_o          (wb_m2s_oc_mem_we),
-    .wb_oc_mem_cyc_o         (wb_m2s_oc_mem_cyc),
-    .wb_oc_mem_stb_o         (wb_m2s_oc_mem_stb),
-    .wb_oc_mem_cti_o         (wb_m2s_oc_mem_cti),
-    .wb_oc_mem_bte_o         (wb_m2s_oc_mem_bte),
-    .wb_oc_mem_dat_i         (wb_s2m_oc_mem_dat),
-    .wb_oc_mem_ack_i         (wb_s2m_oc_mem_ack),
-    .wb_oc_mem_err_i         (wb_s2m_oc_mem_err),
-    .wb_oc_mem_rty_i         (wb_s2m_oc_mem_rty),
+    .wb_spi_flash_mem_adr_o  (wb_m2s_spi_flash_mem_adr),
+    .wb_spi_flash_mem_dat_o  (wb_m2s_spi_flash_mem_dat),
+    .wb_spi_flash_mem_sel_o  (wb_m2s_spi_flash_mem_sel),
+    .wb_spi_flash_mem_we_o   (wb_m2s_spi_flash_mem_we),
+    .wb_spi_flash_mem_cyc_o  (wb_m2s_spi_flash_mem_cyc),
+    .wb_spi_flash_mem_stb_o  (wb_m2s_spi_flash_mem_stb),
+    .wb_spi_flash_mem_cti_o  (wb_m2s_spi_flash_mem_cti),
+    .wb_spi_flash_mem_bte_o  (wb_m2s_spi_flash_mem_bte),
+    .wb_spi_flash_mem_dat_i  (wb_s2m_spi_flash_mem_dat),
+    .wb_spi_flash_mem_ack_i  (wb_s2m_spi_flash_mem_ack),
+    .wb_spi_flash_mem_err_i  (wb_s2m_spi_flash_mem_err),
+    .wb_spi_flash_mem_rty_i  (wb_s2m_spi_flash_mem_rty),
+    .wb_boot_rom_adr_o       (wb_m2s_boot_rom_adr),
+    .wb_boot_rom_dat_o       (wb_m2s_boot_rom_dat),
+    .wb_boot_rom_sel_o       (wb_m2s_boot_rom_sel),
+    .wb_boot_rom_we_o        (wb_m2s_boot_rom_we),
+    .wb_boot_rom_cyc_o       (wb_m2s_boot_rom_cyc),
+    .wb_boot_rom_stb_o       (wb_m2s_boot_rom_stb),
+    .wb_boot_rom_cti_o       (wb_m2s_boot_rom_cti),
+    .wb_boot_rom_bte_o       (wb_m2s_boot_rom_bte),
+    .wb_boot_rom_dat_i       (wb_s2m_boot_rom_dat),
+    .wb_boot_rom_ack_i       (wb_s2m_boot_rom_ack),
+    .wb_boot_rom_err_i       (wb_s2m_boot_rom_err),
+    .wb_boot_rom_rty_i       (wb_s2m_boot_rom_rty),
     .wb_eth0_adr_o           (wb_m2s_eth0_adr),
     .wb_eth0_dat_o           (wb_m2s_eth0_dat),
     .wb_eth0_sel_o           (wb_m2s_eth0_sel),
