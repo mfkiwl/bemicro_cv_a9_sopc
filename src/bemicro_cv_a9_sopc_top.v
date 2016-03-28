@@ -62,6 +62,16 @@ module bemicro_cv_a9_sopc_top (
     
 `include "wb_intercon.vh"
 
+    wire                    ddr3_mem_afi_reset_n;
+    wire                    ddr3_mem_global_reset_n
+    wire                    ddr3_mem_soft_reset_n;
+    wire                    wb_rst;
+    wire                    wb_clk;
+    wire                    eth_25mhz_clk;
+    wire                    eth_2500khz_clk;
+    wire                    eth_25mhz_90deg_clk;
+    wire                    eth_2500khz_90deg_clk;
+
     // JTAG wires
     wire                    jtag_tck_o;
     wire                    jtag_tdi_o;
@@ -104,20 +114,20 @@ module bemicro_cv_a9_sopc_top (
     wire                    eth0_md_pad_oe;
     wire                    eth0_int_o;
 
-    
-    // PLL
-    pll_system pll_system0 (
-        .refclk                     (DDR3_CLK_50MHZ),
-        .rst                        (wb_rst),
-        .outclk_0                   (wb_clk),
-        .outclk_1                   (pll_eth_25mhz),
-        .outclk_2                   (pll_eth_25mhz_90deg),
-        .outclk_3                   (pll_eth_2500khz),
-        .outclk_4                   (pll_eth_2500khz_90deg),
-        .locked                     (pll_system_locked)
+    // Reset sequencer
+    reset_seq reset_seq0 (
+        .ref_clk                    (DDR3_CLK_50MHZ),
+        .reset_n                    (TACT1),
+        .ddr3_mem_afi_reset_n       (ddr3_mem_afi_reset_n),
+        .ddr3_mem_global_reset_n    (ddr3_mem_global_reset_n),
+        .ddr3_mem_soft_reset_n      (ddr3_mem_soft_reset_n),
+        .wb_rst                     (wb_rst),
+        .wb_clk                     (wb_clk),
+        .eth_25mhz_clk              (eth_25mhz_clk),
+        .eth_2500khz_clk            (eth_2500khz_clk),
+        .eth_25mhz_90deg_clk        (eth_25mhz_90deg_clk),
+        .eth_2500khz_90deg_clk      (eth_2500khz_90deg_clk)
     );
-
-    
 
     // JTAG
     altera_virtual_jtag jtag (
@@ -135,6 +145,7 @@ module bemicro_cv_a9_sopc_top (
 
 
 
+    // CPU
     mor1kx #(
         .FEATURE_DEBUGUNIT          ("ENABLED"),
         .FEATURE_CMOV               ("ENABLED"),
@@ -440,10 +451,10 @@ module bemicro_cv_a9_sopc_top (
 
     mii_to_rgmii_adapter mii_to_rgmii (
         .rst                        (wb_rst),
-        .clk_int_25mhz              (pll_eth_25mhz),
-        .clk_int_2500khz            (pll_eth_2500khz),
-        .clk_ext_25mhz              (pll_eth_25mhz_90deg),
-        .clk_ext_2500khz            (pll_eth_2500khz_90deg),
+        .clk_int_25mhz              (eth_25mhz_clk),
+        .clk_int_2500khz            (eth_2500khz_clk),
+        .clk_ext_25mhz              (eth_25mhz_90deg_clk),
+        .clk_ext_2500khz            (eth_2500khz_90deg_clk),
         .eth_10mbps                 (1'b0),
         .rgmii_rx_clk               (ENET_RX_CLK),
         .rgmii_gtx_clk              (ENET_GTX_CLK),
