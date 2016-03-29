@@ -384,7 +384,12 @@ module bemicro_cv_a9_sopc_top (
         .miso_i                     (FPGA_DATA1)
     );
 
-    rom boot_rom (
+    rom #(
+        .DATA_WIDTH                 (32),
+        .ADDR_WIDTH                 (8),
+        .INIT_FILE                  ("./src/rom.hex")
+    )
+    boot_rom (
         // Wishbone slave interface
         .clk_i                      (wb_clk),
         .rst_i                      (wb_rst),
@@ -474,11 +479,6 @@ module bemicro_cv_a9_sopc_top (
         .mii_tx_clk                 (eth0_mtx_clk_pad_i)
 
     );
-
-
- 
-
-
 
 endmodule
 
