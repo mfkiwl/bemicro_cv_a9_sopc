@@ -63,7 +63,7 @@ module bemicro_cv_a9_sopc_top (
 `include "wb_intercon.vh"
 
     wire                    ddr3_mem_afi_reset_n;
-    wire                    ddr3_mem_global_reset_n
+    wire                    ddr3_mem_global_reset_n;
     wire                    ddr3_mem_soft_reset_n;
     wire                    wb_rst;
     wire                    wb_clk;
@@ -248,7 +248,7 @@ module bemicro_cv_a9_sopc_top (
         .traceport_exec_insn_o      (),
         .traceport_exec_wbdata_o    (),
         .traceport_exec_wbreg_o     (),
-        .traceport_exec_wben_o      (),
+        .traceport_exec_wben_o      ()
     );
 
     adbg_top cpu_dbg (
@@ -393,11 +393,11 @@ module bemicro_cv_a9_sopc_top (
         // Wishbone slave interface
         .clk_i                      (wb_clk),
         .rst_i                      (wb_rst),
-        .adr_i                      (wb_m2s_spi_flash_mem_adr),
-        .stb_i                      (wb_m2s_spi_flash_mem_stb),
-        .cyc_i                      (wb_m2s_spi_flash_mem_cyc),
-        .dat_o                      (wb_s2m_spi_flash_mem_dat),
-        .ack_o                      (wb_s2m_spi_flash_mem_ack)
+        .adr_i                      (wb_m2s_boot_rom_adr),
+        .stb_i                      (wb_m2s_boot_rom_stb),
+        .cyc_i                      (wb_m2s_boot_rom_cyc),
+        .dat_o                      (wb_s2m_boot_rom_dat),
+        .ack_o                      (wb_s2m_boot_rom_ack)
     );
 
 
