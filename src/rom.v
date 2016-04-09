@@ -5,6 +5,7 @@ module rom #(
     parameter               DATA_WIDTH = 32,
     parameter               ADDR_WIDTH = 8,
     parameter               INIT_FILE = ""
+)
 (
     input   wire            clk_i,
     input   wire            rst_i,
@@ -47,7 +48,7 @@ module rom #(
     ) mem (
         .clock0                 (clk_i),
         .aclr0                  (rst_i),
-        .clock1                 (1'b1)
+        .clock1                 (1'b1),
         .aclr1                  (1'b0),
 
         .clocken0               (1'b1),
