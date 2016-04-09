@@ -114,6 +114,12 @@ module bemicro_cv_a9_sopc_top (
     wire                    eth0_md_pad_oe;
     wire                    eth0_int_o;
 
+    wire                    cpu_dbg_rst;
+    wire                    cpu_rst;
+
+    assign                  cpu_rst = wb_rst | cpu_dbg_rst;
+
+
     // Unused (for now) outputs
     assign                  USER_LED = 8'hFF;
     assign                  EEPROM_SCL = 1'bz;
@@ -129,6 +135,7 @@ module bemicro_cv_a9_sopc_top (
         .ddr3_mem_soft_reset_n      (ddr3_mem_soft_reset_n),
         .wb_rst                     (wb_rst),
         .wb_clk                     (wb_clk),
+        .phy_rst_n                  (ENET_RSTn),
         .eth_25mhz_clk              (eth_25mhz_clk),
         .eth_2500khz_clk            (eth_2500khz_clk),
         .eth_25mhz_90deg_clk        (eth_25mhz_90deg_clk),
