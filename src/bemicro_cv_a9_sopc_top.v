@@ -387,7 +387,7 @@ module bemicro_cv_a9_sopc_top (
     rom #(
         .DATA_WIDTH                 (32),
         .ADDR_WIDTH                 (8),
-        .INIT_FILE                  ("./src/rom.hex")
+        .INIT_FILE                  ("./mem_init/rom.hex")
     )
     boot_rom (
         // Wishbone slave interface
