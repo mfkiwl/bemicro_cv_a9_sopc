@@ -114,6 +114,12 @@ module bemicro_cv_a9_sopc_top (
     wire                    eth0_md_pad_oe;
     wire                    eth0_int_o;
 
+    // Unused (for now) outputs
+    assign                  USER_LED = 8'hFF;
+    assign                  EEPROM_SCL = 1'bz;
+    assign                  SDCLK = 1'b0;
+    assign                  SDCMD = 1'b0;
+
     // Reset sequencer
     reset_seq reset_seq0 (
         .ref_clk                    (DDR3_CLK_50MHZ),
