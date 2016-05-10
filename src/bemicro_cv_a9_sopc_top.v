@@ -5,12 +5,12 @@ module bemicro_cv_a9_sopc_top (
     input   wire            CLK_24MHZ,
     
     // LED pins
-    output  wire    [7:0]   USER_LED,
+    output  wire    [8:1]   USER_LED,
     
     // Push button pins
     input   wire            TACT1,
     input   wire            TACT2,
-    input   wire    [3:0]   DIP_SW,
+    input   wire    [4:1]   DIP_SW,
     
     // DDR3 pins
     input   wire            DDR3_OCT_RZQIN,
@@ -49,10 +49,7 @@ module bemicro_cv_a9_sopc_top (
     // EPCQ256 pins
     output  wire            FPGA_DCLK,
     output  wire            FPGA_nCSO,
-    output  wire            FPGA_DATA0,
-    input   wire            FPGA_DATA1,
-
-
+    output  wire    [1:0]   FPGA_DATA,
     
     // SD card pins
     output  wire            SDCLK,
@@ -391,10 +388,10 @@ module bemicro_cv_a9_sopc_top (
         .inta_o                     (spi_flash_mem_irq),
         .sck_o                      (FPGA_DCLK),
         .ss_o                       (FPGA_nCSO),
-        .mosi_o                     (FPGA_DATA0),
+        .mosi_o                     (FPGA_DATA[0]),
 
         // Inputs
-        .miso_i                     (FPGA_DATA1)
+        .miso_i                     (FPGA_DATA[1])
     );
 
     rom #(

@@ -1,6 +1,13 @@
 
 set J11_VOLTAGE_SETTING "3.3-V LVTTL"
 
+# Assignments for special pins
+
+set_global_assignment -name RESERVE_DATA0_AFTER_CONFIGURATION       "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_DATA1_AFTER_CONFIGURATION       "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_DCLK_AFTER_CONFIGURATION        "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_FLASH_NCE_AFTER_CONFIGURATION   "USE AS REGULAR IO"
+
 set_location_assignment PIN_H13                                -to DDR3_CLK_50MHZ
 set_location_assignment PIN_M9                                 -to CLK_24MHZ
 
@@ -73,6 +80,11 @@ set_location_assignment PIN_AB5                                -to ENET_RXD[1]
 set_location_assignment PIN_AA7                                -to ENET_RXD[2]
 set_location_assignment PIN_AB7                                -to ENET_RXD[3]
 
+set_location_assignment PIN_AB4                                -to FPGA_DATA[0]
+set_location_assignment PIN_AB3                                -to FPGA_DATA[1]
+set_location_assignment PIN_V3                                 -to FPGA_DCLK
+set_location_assignment PIN_R4                                 -to FPGA_nCSO
+
 set_location_assignment PIN_B17                                -to USER_LED[1]
 set_location_assignment PIN_E19                                -to USER_LED[2]
 set_location_assignment PIN_E21                                -to USER_LED[3]
@@ -112,6 +124,12 @@ set_instance_assignment -name IO_STANDARD $J11_VOLTAGE_SETTING -to ENET_RXD[0]
 set_instance_assignment -name IO_STANDARD $J11_VOLTAGE_SETTING -to ENET_RXD[1]
 set_instance_assignment -name IO_STANDARD $J11_VOLTAGE_SETTING -to ENET_RXD[2]
 set_instance_assignment -name IO_STANDARD $J11_VOLTAGE_SETTING -to ENET_RXD[3]
+
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL"        -to FPGA_DATA[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL"        -to FPGA_DATA[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL"        -to FPGA_DCLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL"        -to FPGA_nCSO
 
 set_instance_assignment -name IO_STANDARD "1.5 V"              -to USER_LED[1]
 set_instance_assignment -name IO_STANDARD "1.5 V"              -to USER_LED[2]
