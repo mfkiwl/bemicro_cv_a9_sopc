@@ -114,6 +114,8 @@ module bemicro_cv_a9_sopc_top (
     wire                    cpu_dbg_rst;
     wire                    cpu_rst;
 
+    wire    [31:0]          cpu_irq;
+
     assign                  cpu_rst = wb_rst | cpu_dbg_rst;
 
 
@@ -489,6 +491,18 @@ module bemicro_cv_a9_sopc_top (
         .mii_tx_clk                 (eth0_mtx_clk_pad_i)
 
     );
+
+    assign cpu_irq = 
+        { 1'b0,                     // IRQ 0
+          1'b0,                     // IRQ 1
+          spi_flash_mem_irq,        // IRQ 2
+          eth0_int_o,               // IRQ 3
+          1'b0,                     // IRQ 4
+          1'b0,                     // IRQ 5
+          1'b0,                     // IRQ 6
+          1'b0,                     // IRQ 7
+          24'b0                     // IRQ 8-31
+        };
 
 endmodule
 
