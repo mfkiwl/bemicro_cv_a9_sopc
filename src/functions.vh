@@ -1,7 +1,4 @@
 
-`ifndef __FUNCTIONS_VH__
-`define __FUNCTIONS_VH__ 1
-
     function integer clog2b;
         input integer value;
         integer i;
@@ -11,6 +8,4 @@
             clog2b = i;
         end
     endfunction
-
-`endif
 

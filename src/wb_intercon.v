@@ -110,7 +110,19 @@ module wb_intercon
     input  [31:0] wb_eth0_dat_i,
     input         wb_eth0_ack_i,
     input         wb_eth0_err_i,
-    input         wb_eth0_rty_i);
+    input         wb_eth0_rty_i,
+    output [31:0] wb_io_adr_o,
+    output [31:0] wb_io_dat_o,
+    output  [3:0] wb_io_sel_o,
+    output        wb_io_we_o,
+    output        wb_io_cyc_o,
+    output        wb_io_stb_o,
+    output  [2:0] wb_io_cti_o,
+    output  [1:0] wb_io_bte_o,
+    input  [31:0] wb_io_dat_i,
+    input         wb_io_ack_i,
+    input         wb_io_err_i,
+    input         wb_io_rty_i);
 
 wire [31:0] wb_m2s_cpu_i_spi_flash_mem_adr;
 wire [31:0] wb_m2s_cpu_i_spi_flash_mem_dat;
@@ -172,6 +184,18 @@ wire [31:0] wb_s2m_cpu_d_boot_rom_dat;
 wire        wb_s2m_cpu_d_boot_rom_ack;
 wire        wb_s2m_cpu_d_boot_rom_err;
 wire        wb_s2m_cpu_d_boot_rom_rty;
+wire [31:0] wb_m2s_cpu_d_io_adr;
+wire [31:0] wb_m2s_cpu_d_io_dat;
+wire  [3:0] wb_m2s_cpu_d_io_sel;
+wire        wb_m2s_cpu_d_io_we;
+wire        wb_m2s_cpu_d_io_cyc;
+wire        wb_m2s_cpu_d_io_stb;
+wire  [2:0] wb_m2s_cpu_d_io_cti;
+wire  [1:0] wb_m2s_cpu_d_io_bte;
+wire [31:0] wb_s2m_cpu_d_io_dat;
+wire        wb_s2m_cpu_d_io_ack;
+wire        wb_s2m_cpu_d_io_err;
+wire        wb_s2m_cpu_d_io_rty;
 wire [31:0] wb_m2s_cpu_dbg_ddr3_mem_port1_adr;
 wire [31:0] wb_m2s_cpu_dbg_ddr3_mem_port1_dat;
 wire  [3:0] wb_m2s_cpu_dbg_ddr3_mem_port1_sel;
@@ -208,6 +232,18 @@ wire [31:0] wb_s2m_cpu_dbg_boot_rom_dat;
 wire        wb_s2m_cpu_dbg_boot_rom_ack;
 wire        wb_s2m_cpu_dbg_boot_rom_err;
 wire        wb_s2m_cpu_dbg_boot_rom_rty;
+wire [31:0] wb_m2s_cpu_dbg_io_adr;
+wire [31:0] wb_m2s_cpu_dbg_io_dat;
+wire  [3:0] wb_m2s_cpu_dbg_io_sel;
+wire        wb_m2s_cpu_dbg_io_we;
+wire        wb_m2s_cpu_dbg_io_cyc;
+wire        wb_m2s_cpu_dbg_io_stb;
+wire  [2:0] wb_m2s_cpu_dbg_io_cti;
+wire  [1:0] wb_m2s_cpu_dbg_io_bte;
+wire [31:0] wb_s2m_cpu_dbg_io_dat;
+wire        wb_s2m_cpu_dbg_io_ack;
+wire        wb_s2m_cpu_dbg_io_err;
+wire        wb_s2m_cpu_dbg_io_rty;
 wire [31:0] wb_m2s_eth0_master_ddr3_mem_port1_adr;
 wire [31:0] wb_m2s_eth0_master_ddr3_mem_port1_dat;
 wire  [3:0] wb_m2s_eth0_master_ddr3_mem_port1_sel;
@@ -254,9 +290,9 @@ wb_mux
     .wbs_rty_i ({wb_ddr3_mem_port2_rty_i, wb_s2m_cpu_i_spi_flash_mem_rty, wb_s2m_cpu_i_boot_rom_rty}));
 
 wb_mux
-  #(.num_slaves (4),
-    .MATCH_ADDR ({32'h00000000, 32'h08000000, 32'h0a000000, 32'h10000000}),
-    .MATCH_MASK ({32'hf8000000, 32'hfe000000, 32'hfffffc00, 32'hffff0000}))
+  #(.num_slaves (5),
+    .MATCH_ADDR ({32'h00000000, 32'h08000000, 32'h0a000000, 32'h11000000, 32'h10000000}),
+    .MATCH_MASK ({32'hf8000000, 32'hfe000000, 32'hfffffc00, 32'hfffffff0, 32'hffff0000}))
  wb_mux_cpu_d
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),
@@ -272,23 +308,23 @@ wb_mux
     .wbm_ack_o (wb_cpu_d_ack_o),
     .wbm_err_o (wb_cpu_d_err_o),
     .wbm_rty_o (wb_cpu_d_rty_o),
-    .wbs_adr_o ({wb_m2s_cpu_d_ddr3_mem_port1_adr, wb_m2s_cpu_d_spi_flash_mem_adr, wb_m2s_cpu_d_boot_rom_adr, wb_eth0_adr_o}),
-    .wbs_dat_o ({wb_m2s_cpu_d_ddr3_mem_port1_dat, wb_m2s_cpu_d_spi_flash_mem_dat, wb_m2s_cpu_d_boot_rom_dat, wb_eth0_dat_o}),
-    .wbs_sel_o ({wb_m2s_cpu_d_ddr3_mem_port1_sel, wb_m2s_cpu_d_spi_flash_mem_sel, wb_m2s_cpu_d_boot_rom_sel, wb_eth0_sel_o}),
-    .wbs_we_o  ({wb_m2s_cpu_d_ddr3_mem_port1_we, wb_m2s_cpu_d_spi_flash_mem_we, wb_m2s_cpu_d_boot_rom_we, wb_eth0_we_o}),
-    .wbs_cyc_o ({wb_m2s_cpu_d_ddr3_mem_port1_cyc, wb_m2s_cpu_d_spi_flash_mem_cyc, wb_m2s_cpu_d_boot_rom_cyc, wb_eth0_cyc_o}),
-    .wbs_stb_o ({wb_m2s_cpu_d_ddr3_mem_port1_stb, wb_m2s_cpu_d_spi_flash_mem_stb, wb_m2s_cpu_d_boot_rom_stb, wb_eth0_stb_o}),
-    .wbs_cti_o ({wb_m2s_cpu_d_ddr3_mem_port1_cti, wb_m2s_cpu_d_spi_flash_mem_cti, wb_m2s_cpu_d_boot_rom_cti, wb_eth0_cti_o}),
-    .wbs_bte_o ({wb_m2s_cpu_d_ddr3_mem_port1_bte, wb_m2s_cpu_d_spi_flash_mem_bte, wb_m2s_cpu_d_boot_rom_bte, wb_eth0_bte_o}),
-    .wbs_dat_i ({wb_s2m_cpu_d_ddr3_mem_port1_dat, wb_s2m_cpu_d_spi_flash_mem_dat, wb_s2m_cpu_d_boot_rom_dat, wb_eth0_dat_i}),
-    .wbs_ack_i ({wb_s2m_cpu_d_ddr3_mem_port1_ack, wb_s2m_cpu_d_spi_flash_mem_ack, wb_s2m_cpu_d_boot_rom_ack, wb_eth0_ack_i}),
-    .wbs_err_i ({wb_s2m_cpu_d_ddr3_mem_port1_err, wb_s2m_cpu_d_spi_flash_mem_err, wb_s2m_cpu_d_boot_rom_err, wb_eth0_err_i}),
-    .wbs_rty_i ({wb_s2m_cpu_d_ddr3_mem_port1_rty, wb_s2m_cpu_d_spi_flash_mem_rty, wb_s2m_cpu_d_boot_rom_rty, wb_eth0_rty_i}));
+    .wbs_adr_o ({wb_m2s_cpu_d_ddr3_mem_port1_adr, wb_m2s_cpu_d_spi_flash_mem_adr, wb_m2s_cpu_d_boot_rom_adr, wb_m2s_cpu_d_io_adr, wb_eth0_adr_o}),
+    .wbs_dat_o ({wb_m2s_cpu_d_ddr3_mem_port1_dat, wb_m2s_cpu_d_spi_flash_mem_dat, wb_m2s_cpu_d_boot_rom_dat, wb_m2s_cpu_d_io_dat, wb_eth0_dat_o}),
+    .wbs_sel_o ({wb_m2s_cpu_d_ddr3_mem_port1_sel, wb_m2s_cpu_d_spi_flash_mem_sel, wb_m2s_cpu_d_boot_rom_sel, wb_m2s_cpu_d_io_sel, wb_eth0_sel_o}),
+    .wbs_we_o  ({wb_m2s_cpu_d_ddr3_mem_port1_we, wb_m2s_cpu_d_spi_flash_mem_we, wb_m2s_cpu_d_boot_rom_we, wb_m2s_cpu_d_io_we, wb_eth0_we_o}),
+    .wbs_cyc_o ({wb_m2s_cpu_d_ddr3_mem_port1_cyc, wb_m2s_cpu_d_spi_flash_mem_cyc, wb_m2s_cpu_d_boot_rom_cyc, wb_m2s_cpu_d_io_cyc, wb_eth0_cyc_o}),
+    .wbs_stb_o ({wb_m2s_cpu_d_ddr3_mem_port1_stb, wb_m2s_cpu_d_spi_flash_mem_stb, wb_m2s_cpu_d_boot_rom_stb, wb_m2s_cpu_d_io_stb, wb_eth0_stb_o}),
+    .wbs_cti_o ({wb_m2s_cpu_d_ddr3_mem_port1_cti, wb_m2s_cpu_d_spi_flash_mem_cti, wb_m2s_cpu_d_boot_rom_cti, wb_m2s_cpu_d_io_cti, wb_eth0_cti_o}),
+    .wbs_bte_o ({wb_m2s_cpu_d_ddr3_mem_port1_bte, wb_m2s_cpu_d_spi_flash_mem_bte, wb_m2s_cpu_d_boot_rom_bte, wb_m2s_cpu_d_io_bte, wb_eth0_bte_o}),
+    .wbs_dat_i ({wb_s2m_cpu_d_ddr3_mem_port1_dat, wb_s2m_cpu_d_spi_flash_mem_dat, wb_s2m_cpu_d_boot_rom_dat, wb_s2m_cpu_d_io_dat, wb_eth0_dat_i}),
+    .wbs_ack_i ({wb_s2m_cpu_d_ddr3_mem_port1_ack, wb_s2m_cpu_d_spi_flash_mem_ack, wb_s2m_cpu_d_boot_rom_ack, wb_s2m_cpu_d_io_ack, wb_eth0_ack_i}),
+    .wbs_err_i ({wb_s2m_cpu_d_ddr3_mem_port1_err, wb_s2m_cpu_d_spi_flash_mem_err, wb_s2m_cpu_d_boot_rom_err, wb_s2m_cpu_d_io_err, wb_eth0_err_i}),
+    .wbs_rty_i ({wb_s2m_cpu_d_ddr3_mem_port1_rty, wb_s2m_cpu_d_spi_flash_mem_rty, wb_s2m_cpu_d_boot_rom_rty, wb_s2m_cpu_d_io_rty, wb_eth0_rty_i}));
 
 wb_mux
-  #(.num_slaves (3),
-    .MATCH_ADDR ({32'h00000000, 32'h08000000, 32'h0a000000}),
-    .MATCH_MASK ({32'hf8000000, 32'hfe000000, 32'hfffffc00}))
+  #(.num_slaves (4),
+    .MATCH_ADDR ({32'h00000000, 32'h08000000, 32'h0a000000, 32'h11000000}),
+    .MATCH_MASK ({32'hf8000000, 32'hfe000000, 32'hfffffc00, 32'hfffffff0}))
  wb_mux_cpu_dbg
    (.wb_clk_i  (wb_clk_i),
     .wb_rst_i  (wb_rst_i),
@@ -304,18 +340,18 @@ wb_mux
     .wbm_ack_o (wb_cpu_dbg_ack_o),
     .wbm_err_o (wb_cpu_dbg_err_o),
     .wbm_rty_o (wb_cpu_dbg_rty_o),
-    .wbs_adr_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_adr, wb_m2s_cpu_dbg_spi_flash_mem_adr, wb_m2s_cpu_dbg_boot_rom_adr}),
-    .wbs_dat_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_dat, wb_m2s_cpu_dbg_spi_flash_mem_dat, wb_m2s_cpu_dbg_boot_rom_dat}),
-    .wbs_sel_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_sel, wb_m2s_cpu_dbg_spi_flash_mem_sel, wb_m2s_cpu_dbg_boot_rom_sel}),
-    .wbs_we_o  ({wb_m2s_cpu_dbg_ddr3_mem_port1_we, wb_m2s_cpu_dbg_spi_flash_mem_we, wb_m2s_cpu_dbg_boot_rom_we}),
-    .wbs_cyc_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_cyc, wb_m2s_cpu_dbg_spi_flash_mem_cyc, wb_m2s_cpu_dbg_boot_rom_cyc}),
-    .wbs_stb_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_stb, wb_m2s_cpu_dbg_spi_flash_mem_stb, wb_m2s_cpu_dbg_boot_rom_stb}),
-    .wbs_cti_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_cti, wb_m2s_cpu_dbg_spi_flash_mem_cti, wb_m2s_cpu_dbg_boot_rom_cti}),
-    .wbs_bte_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_bte, wb_m2s_cpu_dbg_spi_flash_mem_bte, wb_m2s_cpu_dbg_boot_rom_bte}),
-    .wbs_dat_i ({wb_s2m_cpu_dbg_ddr3_mem_port1_dat, wb_s2m_cpu_dbg_spi_flash_mem_dat, wb_s2m_cpu_dbg_boot_rom_dat}),
-    .wbs_ack_i ({wb_s2m_cpu_dbg_ddr3_mem_port1_ack, wb_s2m_cpu_dbg_spi_flash_mem_ack, wb_s2m_cpu_dbg_boot_rom_ack}),
-    .wbs_err_i ({wb_s2m_cpu_dbg_ddr3_mem_port1_err, wb_s2m_cpu_dbg_spi_flash_mem_err, wb_s2m_cpu_dbg_boot_rom_err}),
-    .wbs_rty_i ({wb_s2m_cpu_dbg_ddr3_mem_port1_rty, wb_s2m_cpu_dbg_spi_flash_mem_rty, wb_s2m_cpu_dbg_boot_rom_rty}));
+    .wbs_adr_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_adr, wb_m2s_cpu_dbg_spi_flash_mem_adr, wb_m2s_cpu_dbg_boot_rom_adr, wb_m2s_cpu_dbg_io_adr}),
+    .wbs_dat_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_dat, wb_m2s_cpu_dbg_spi_flash_mem_dat, wb_m2s_cpu_dbg_boot_rom_dat, wb_m2s_cpu_dbg_io_dat}),
+    .wbs_sel_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_sel, wb_m2s_cpu_dbg_spi_flash_mem_sel, wb_m2s_cpu_dbg_boot_rom_sel, wb_m2s_cpu_dbg_io_sel}),
+    .wbs_we_o  ({wb_m2s_cpu_dbg_ddr3_mem_port1_we, wb_m2s_cpu_dbg_spi_flash_mem_we, wb_m2s_cpu_dbg_boot_rom_we, wb_m2s_cpu_dbg_io_we}),
+    .wbs_cyc_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_cyc, wb_m2s_cpu_dbg_spi_flash_mem_cyc, wb_m2s_cpu_dbg_boot_rom_cyc, wb_m2s_cpu_dbg_io_cyc}),
+    .wbs_stb_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_stb, wb_m2s_cpu_dbg_spi_flash_mem_stb, wb_m2s_cpu_dbg_boot_rom_stb, wb_m2s_cpu_dbg_io_stb}),
+    .wbs_cti_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_cti, wb_m2s_cpu_dbg_spi_flash_mem_cti, wb_m2s_cpu_dbg_boot_rom_cti, wb_m2s_cpu_dbg_io_cti}),
+    .wbs_bte_o ({wb_m2s_cpu_dbg_ddr3_mem_port1_bte, wb_m2s_cpu_dbg_spi_flash_mem_bte, wb_m2s_cpu_dbg_boot_rom_bte, wb_m2s_cpu_dbg_io_bte}),
+    .wbs_dat_i ({wb_s2m_cpu_dbg_ddr3_mem_port1_dat, wb_s2m_cpu_dbg_spi_flash_mem_dat, wb_s2m_cpu_dbg_boot_rom_dat, wb_s2m_cpu_dbg_io_dat}),
+    .wbs_ack_i ({wb_s2m_cpu_dbg_ddr3_mem_port1_ack, wb_s2m_cpu_dbg_spi_flash_mem_ack, wb_s2m_cpu_dbg_boot_rom_ack, wb_s2m_cpu_dbg_io_ack}),
+    .wbs_err_i ({wb_s2m_cpu_dbg_ddr3_mem_port1_err, wb_s2m_cpu_dbg_spi_flash_mem_err, wb_s2m_cpu_dbg_boot_rom_err, wb_s2m_cpu_dbg_io_err}),
+    .wbs_rty_i ({wb_s2m_cpu_dbg_ddr3_mem_port1_rty, wb_s2m_cpu_dbg_spi_flash_mem_rty, wb_s2m_cpu_dbg_boot_rom_rty, wb_s2m_cpu_dbg_io_rty}));
 
 wb_mux
   #(.num_slaves (1),
@@ -438,5 +474,35 @@ wb_arbiter
     .wbs_ack_i (wb_boot_rom_ack_i),
     .wbs_err_i (wb_boot_rom_err_i),
     .wbs_rty_i (wb_boot_rom_rty_i));
+
+wb_arbiter
+  #(.num_masters (2))
+ wb_arbiter_io
+   (.wb_clk_i  (wb_clk_i),
+    .wb_rst_i  (wb_rst_i),
+    .wbm_adr_i ({wb_m2s_cpu_d_io_adr, wb_m2s_cpu_dbg_io_adr}),
+    .wbm_dat_i ({wb_m2s_cpu_d_io_dat, wb_m2s_cpu_dbg_io_dat}),
+    .wbm_sel_i ({wb_m2s_cpu_d_io_sel, wb_m2s_cpu_dbg_io_sel}),
+    .wbm_we_i  ({wb_m2s_cpu_d_io_we, wb_m2s_cpu_dbg_io_we}),
+    .wbm_cyc_i ({wb_m2s_cpu_d_io_cyc, wb_m2s_cpu_dbg_io_cyc}),
+    .wbm_stb_i ({wb_m2s_cpu_d_io_stb, wb_m2s_cpu_dbg_io_stb}),
+    .wbm_cti_i ({wb_m2s_cpu_d_io_cti, wb_m2s_cpu_dbg_io_cti}),
+    .wbm_bte_i ({wb_m2s_cpu_d_io_bte, wb_m2s_cpu_dbg_io_bte}),
+    .wbm_dat_o ({wb_s2m_cpu_d_io_dat, wb_s2m_cpu_dbg_io_dat}),
+    .wbm_ack_o ({wb_s2m_cpu_d_io_ack, wb_s2m_cpu_dbg_io_ack}),
+    .wbm_err_o ({wb_s2m_cpu_d_io_err, wb_s2m_cpu_dbg_io_err}),
+    .wbm_rty_o ({wb_s2m_cpu_d_io_rty, wb_s2m_cpu_dbg_io_rty}),
+    .wbs_adr_o (wb_io_adr_o),
+    .wbs_dat_o (wb_io_dat_o),
+    .wbs_sel_o (wb_io_sel_o),
+    .wbs_we_o  (wb_io_we_o),
+    .wbs_cyc_o (wb_io_cyc_o),
+    .wbs_stb_o (wb_io_stb_o),
+    .wbs_cti_o (wb_io_cti_o),
+    .wbs_bte_o (wb_io_bte_o),
+    .wbs_dat_i (wb_io_dat_i),
+    .wbs_ack_i (wb_io_ack_i),
+    .wbs_err_i (wb_io_err_i),
+    .wbs_rty_i (wb_io_rty_i));
 
 endmodule
