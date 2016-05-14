@@ -111,6 +111,9 @@ module bemicro_cv_a9_sopc_top (
     wire                    eth0_md_pad_oe;
     wire                    eth0_int_o;
 
+    wire    [63:0]          io_outputs_o;
+    wire    [63:0]          io_inputs_i;
+
     wire                    cpu_dbg_rst;
     wire                    cpu_rst;
 
@@ -120,10 +123,16 @@ module bemicro_cv_a9_sopc_top (
 
 
     // Unused (for now) outputs
-    assign                  USER_LED = 8'hFF;
-    assign                  EEPROM_SCL = 1'bz;
-    assign                  SDCLK = 1'b0;
-    assign                  SDCMD = 1'b0;
+    assign                  EEPROM_SCL          = 1'bz;
+    assign                  SDCLK               = 1'b0;
+    assign                  SDCMD               = 1'b0;
+
+    assign                  io_inputs_i[0]      = TACT1;
+    assign                  io_inputs_i[1]      = TACT2;
+    assign                  io_inputs_i[5:2]    = DIP_SW[4:1];
+    assign                  io_inputs_i[63:6]   = 58'b0;
+
+    assign                  USER_LED            = io_outputs_o[7:0];
 
     // Reset sequencer
     reset_seq reset_seq0 (
@@ -411,6 +420,23 @@ module bemicro_cv_a9_sopc_top (
         .dat_o                      (wb_s2m_boot_rom_dat),
         .ack_o                      (wb_s2m_boot_rom_ack)
     );
+
+    misc_io io (
+       // Wishbone slave interface
+        .clk_i                      (wb_clk),
+        .rst_i                      (wb_rst),
+        .adr_i                      (wb_m2s_io_adr),
+        .dat_i                      (wb_m2s_io_dat),
+        .we_i                       (wb_m2s_io_we),
+        .stb_i                      (wb_m2s_io_stb),
+        .cyc_i                      (wb_m2s_io_cyc),
+        .dat_o                      (wb_s2m_io_dat),
+        .ack_o                      (wb_s2m_io_ack),
+
+        .outputs_o                  (io_outputs_o),
+        .inputs_i                   (io_inputs_i)
+    );
+ 
 
 
     assign ENET_MDIO = eth0_md_pad_oe ? eth0_md_pad_o : 1'bz;
